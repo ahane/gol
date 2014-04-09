@@ -65,7 +65,8 @@ var grid = React.createClass({
       }());
     }
 
-    
+
+    /*optimize branch*/
 
     return ({settings: settings});
   },
