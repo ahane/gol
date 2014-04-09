@@ -27,19 +27,24 @@ module.exports = React.createClass({
 
 var cell = React.createClass({
 
+  toggle: function () {
+    this.props.toggleCell(this.props.i, this.props.j);
+  },
 
   render: function () {
     var W = 10;
     var H = 10;
-    
+    var i = this.props.i;
+    var j = this.props.j;
+    var setting = this.props.setting;
     var style;
-    if (this.props.on === true) {style = {fill: "#ffffff", strokeWidth: "1", stroke: "#000000"};}
+    if (setting === true) {style = {fill: "#ffffff", strokeWidth: "1", stroke: "#000000"};}
     else {style = {fill: "#000000", strokeWidth: "1", stroke: "#ffffff"};}
 
-    var x = this.props.x;
-    var y = this.props.y;
+    var x = i*10;
+    var y = j*10;
     
-    var toggle = this.props.toggle;
+    var toggle = this.toggle;
 
     return (
       /* jshint ignore:start */  
@@ -68,10 +73,11 @@ var grid = React.createClass({
 
     /*optimize branch*/
 
+
     return ({settings: settings});
   },
 
-  toggleCell: function (i, j) {
+  toggleCell2: function (i, j) {
     var settings = this.state.settings;
     settings[i][j] = !settings[i][j];
     this.setState({settings: settings});
@@ -81,32 +87,43 @@ var grid = React.createClass({
     var settings = this.state.settings;
     var xMargin = 20;
     var yMargin = 20;
-    var toggleCell = this.toggleCell;
+    var toggleCell = this.toggleCell2;
     var style = {width: "400", height:"400"};
 
 
-    var cells = settings.map(function (row, i) {
+    /*var cells = settings.map(function (row, i) {
       return(
         row.map(function (elem, j) {
           console.log("running inner loop");
           var x = xMargin+(j*10);
           var y = yMargin+(i*10);
           var toggle = toggleCell.bind(null, i, j);
-          return (<cell on={elem} x={x} y={y} i={i} j={j} toggle={toggle}/>);
+          return (<cell settings={settings}i={i} j={j} toggle={toggle}/>);
         })
       );
-    });
+    });/*
 
     var cellsFlat = [];
     cellsFlat = cellsFlat.concat.apply(cellsFlat, cells);
-    
+    */
     return (
       /* jshint ignore:start */  
       <svg style={style}>
-        {cellsFlat}
+        {settings.map(
+          function (row, i) {
+              return(
+                row.map(
+                  function (elem, j) {
+                    return (<cell setting={elem} i={i} j={j} toggleCell={toggleCell} />);
+                  }
+                )
+              );
+          }
+        )}
       </svg>
+
       /* jshint ignore:end */
-    );
+      );
   }
 });
 
