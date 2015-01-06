@@ -1,15 +1,16 @@
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /** @jsx React.DOM */
 /*jshint indent: 2, node: true, nomen: true, browser: true*/
 /*global React */
 
 'use strict';
-module.exports = React.createClass({
+module.exports = React.createClass({displayName: 'exports',
   render: function () {
-    return (<game n={50} m={31}/>);
+    return (game( {n:50, m:31}));
   }
 });
 
-var game = React.createClass({
+var game = React.createClass({displayName: 'game',
 
   getInitialState: function () {
     //initialize a grid with all values set to false
@@ -107,19 +108,19 @@ var game = React.createClass({
   render: function () {
   	return (
         /* jshint ignore:start */
-        <div>
-          <grid running={this.state.running} settings={this.state.settings} toggleCell={this.toggleCell} n={this.props.n} m={this.props.m}/>
-          <div>
-            <toggleRunningButton running={this.state.running} handleClick={this.toggleRunning} />
-            <resetButton handleClick={this.resetAllCells} />
-          </div>
-        </div>
+        React.DOM.div(null, 
+          grid( {running:this.state.running, settings:this.state.settings, toggleCell:this.toggleCell, n:this.props.n, m:this.props.m}),
+          React.DOM.div(null, 
+            toggleRunningButton( {running:this.state.running, handleClick:this.toggleRunning} ),
+            resetButton( {handleClick:this.resetAllCells} )
+          )
+        )
         /* jshint ignore:end */
   	);
   }
 });
 
-var cell = React.createClass({
+var cell = React.createClass({displayName: 'cell',
 
   toggle: function () {
     this.props.toggleCell(this.props.i, this.props.j);
@@ -142,13 +143,13 @@ var cell = React.createClass({
 
     return (
       /* jshint ignore:start */  
-      <rect x={x} y={y} width={W} height={H} style={style} onClick={toggle}/>
+      React.DOM.rect( {x:x, y:y, width:W, height:H, style:style, onClick:toggle})
       /* jshint ignore:end */
     );
   }
 });
 
-var grid = React.createClass({
+var grid = React.createClass({displayName: 'grid',
   render: function () {
     var settings = this.props.settings,
         toggleCell = this.props.toggleCell,
@@ -157,38 +158,54 @@ var grid = React.createClass({
         height = cellSize * this.props.m;
     return (
       /* jshint ignore:start */  
-      <svg width={width} height={height}>
-        {settings.map(
+      React.DOM.svg( {width:width, height:height}, 
+        settings.map(
           function (row, i) {
             return(
               row.map(
                 function (elem, j) {
-                  return (<cell cellSize={cellSize} setting={elem} i={i} j={j} toggleCell={toggleCell} />);
+                  return (cell( {cellSize:cellSize, setting:elem, i:i, j:j, toggleCell:toggleCell} ));
                 }
               )
             );
           }
-        )}
-      </svg>
+        )
+      )
       /* jshint ignore:end */
     );
   }
 });
 
-var toggleRunningButton = React.createClass({
+var toggleRunningButton = React.createClass({displayName: 'toggleRunningButton',
   render: function () {
     var handleClick = this.props.handleClick
     var running = this.props.running;
     /* jshint ignore:start */
-    return (<button onClick={handleClick}>{running ? "stop":"run"}</button>);
+    return (React.DOM.button( {onClick:handleClick}, running ? "stop":"run"));
     /* jshint ignore:end */
     //
   }
 }); 
 
-var resetButton = React.createClass({
+var resetButton = React.createClass({displayName: 'resetButton',
   render: function () {
     var handleClick = this.props.handleClick;
-    return (<button onClick={handleClick}>reset</button>);
+    return (React.DOM.button( {onClick:handleClick}, "reset"));
   }
 });
+},{}],2:[function(require,module,exports){
+/** @jsx React.DOM */
+/*jshint indent: 2, node: true, nomen: true, browser: true*/
+/*global React */
+'use strict';
+
+var app = require('./app.jsx');
+
+React.renderComponent(
+  /* jshint ignore:start */
+  app(null ),
+  document.getElementById('app')
+  /* jshint ignore:end */
+);
+
+},{"./app.jsx":1}]},{},[2]);
